@@ -20,4 +20,4 @@ app.use("/recipes", recipesRouter);
 
 mongoose.connect(mongoKey);
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+app.listen(port);
