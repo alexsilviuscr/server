@@ -28,6 +28,16 @@ router.post("/", async (req, res) => {
   }
 });
 
+//get recipe by id
+router.get("/:recipeId", async (req, res) => {
+    try {
+      const result = await RecipeModel.findById(req.params.recipeId);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+});
+
 // add recipe to user's saved recipes
 router.put("/", async (req, res) => {
 
@@ -49,7 +59,7 @@ router.put("/", async (req, res) => {
 router.get("/saved-recipes/ids/:userId", async (req, res) => {
     try {
         const user = await UserModel.findById(req.params.userId);
-        res.status(200).json( { savedRecipes: user?.savedRecipes } );
+        res.status(201).json( { savedRecipes: user?.savedRecipes } );
     } catch (error) {
         res.status(500).json({ message: "Couldn't get saved recipes IDs." });
   }
@@ -63,7 +73,7 @@ router.get("/saved-recipes/:userId", async (req, res) => {
             _id: { $in: user.savedRecipes }
         });
 
-        res.status(200).json( { savedRecipes } );
+        res.status(201).json( { savedRecipes } );
     } catch (error) {
         res.status(500).json({ message: "Couldn't get saved recipes." });
   }
