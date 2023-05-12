@@ -38,7 +38,7 @@ router.get("/:recipeId", async (req, res) => {
     }
 });
 
-// add recipe to user's saved recipes
+// save recipe
 router.put("/", async (req, res) => {
 
     try {
@@ -48,14 +48,14 @@ router.put("/", async (req, res) => {
         user.savedRecipes.push(recipe);
         await user.save();
 
-        res.json ({ savedRecipes: user.savedRecipes });
+        res.status(201).json ({ savedRecipes: user.savedRecipes });
 
     } catch (error) {
         res.status(500).json({ message: "Couldn't save recipe." });
   }
 });
 
-// get the user saved recipes IDs 
+// get IDs of saved recipes
 router.get("/savedRecipes/ids/:userId", async (req, res) => {
     try {
         const user = await UserModel.findById(req.params.userId);
