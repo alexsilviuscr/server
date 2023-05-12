@@ -12,10 +12,10 @@ const RecipesSchema = new mongoose.Schema({
         ref: "users",
         required: true
     },
-    // image: { 
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'image',
-    //     required: true },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 export const RecipeModel = mongoose.model("recipes", RecipesSchema);
