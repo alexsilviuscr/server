@@ -18,6 +18,8 @@ app.use(cors());
 app.use("/auth", userRouter);
 app.use("/recipes", recipesRouter);
 
-mongoose.connect(mongoKey);
-
+mongoose.connect(mongoKey, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
 app.listen(port);
