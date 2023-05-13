@@ -13,10 +13,7 @@ const RecipesSchema = new mongoose.Schema({
         ref: "users",
         required: true
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+    createdAt: { type: Date, default: Date.now },
 });
 
 export const RecipeModel = mongoose.model("recipes", RecipesSchema);

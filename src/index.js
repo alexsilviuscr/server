@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { UserModel } from "./models/Users.js";
 
 import { userRouter } from "./routes/users.js";
 import { recipesRouter } from "./routes/recipes.js";

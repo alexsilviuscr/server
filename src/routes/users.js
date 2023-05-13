@@ -11,7 +11,6 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 router.post("/register", async (req, res) => {
     const { username, email, password } = req.body;
-
     const user = await UserModel.findOne({ $or: [{ username }, { email }] });
 
     // check if user already exists
@@ -21,7 +20,7 @@ router.post("/register", async (req, res) => {
         } else if (user.username === username) {
             return res.status(400).json({ message: "Username already exists." });
         } else if (user.email === email) {
-        return res.status(400).json({ message: "Email already exists." });
+            return res.status(400).json({ message: "Email already exists." });
         }
     };
 
@@ -33,12 +32,10 @@ router.post("/register", async (req, res) => {
         username, email, password: hashedPassword 
     });
     await newUser.save();
-
     res.json({ message: "Welcome to BariCare!" });
 });
 
 router.post("/login", async (req, res) => {
-
     const { email, password } = req.body;
     const user = await UserModel.findOne({ email });
 
@@ -72,18 +69,17 @@ router.get("/:id/username", async (req, res) => {
     }
 });
 
-// router.get("/:id/savedRecipes", async (req, res) => {
-//     try {
-//         const user = await UserModel.findById(req.params.id);
-//         if (!user) {
-//             return res.status(404).json({ message: "User not found." });
-//         }
-//         res.json({ savedRecipes: user.savedRecipes });
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ message: "Server Error." });
-//     }
-// });
-
+router.get("/:id/saved-recipes", async (req, res) => {
+    try {
+        const user = await UserModel.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
+        res.json({ savedRecipes: user.savedRecipes });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server Error." });
+    }
+});
 
 export { router as userRouter }; 
