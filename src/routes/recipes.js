@@ -96,44 +96,4 @@ router.get("/saved-recipes/:userId", async (req, res) => {
   }
 });
 
-// removed saved recipe from saved recipes list
-router.delete("/saved-recipes/:userId", async (req, res) => {
-    try {
-        const user = await UserModel.findById(req.params.userId);
-        const recipeIndex = user.savedRecipes.findIndex(savedRecipe => savedRecipe.toString() === req.params.recipeId);
-
-        if (recipeIndex === -1) {
-          return res.status(404).json({ message: "Recipe not found in saved recipes." });
-        }
-
-        user.savedRecipes.splice(recipeIndex, 1);
-        await user.save();
-
-        res.status(200).json ({ savedRecipes: user.savedRecipes });
-
-    } catch (error) {
-        res.status(500).json({ message: "Couldn't remove saved recipe." });
-  }
-});
-
-// removed saved recipe from saved recipes list #2
-router.delete("/saved-recipes/:userId/:recipeId", async (req, res) => {
-  try {
-      const user = await UserModel.findById(req.params.userId);
-      const recipeIndex = user.savedRecipes.findIndex(savedRecipe => savedRecipe.toString() === req.params.recipeId);
-
-      if (recipeIndex === -1) {
-        return res.status(404).json({ message: "Recipe not found in saved recipes." });
-      }
-
-      user.savedRecipes.splice(recipeIndex, 1);
-      await user.save();
-
-      res.status(200).json ({ savedRecipes: user.savedRecipes });
-
-  } catch (error) {
-      res.status(500).json({ message: "Couldn't remove saved recipe." });
-}
-});
-
 export { router as recipesRouter };
