@@ -96,53 +96,20 @@ router.get("/saved-recipes/:userId", async (req, res) => {
   }
 });
 
-// delete recipe by id - WORKS
-router.delete("/:recipeId", async (req, res) => {
-  try {
-      const result = await RecipeModel.findByIdAndDelete(req.params.recipeId);
-      if (!result) {
-          res.status(404).json({ message: "Recipe not found." });
-          console.log("Recipe not found");
-      } else {
-          res.status(200).json({ message: "Recipe deleted." });
-          console.log("Recipe deleted");
-      }
-  } catch (error) {
-      res.status(500).json({ message: "Couldn't delete recipe." });
-  }
-});
-
-// remove saved recipe by id from saved recipes list
-// delete saved recipe by id
-router.findByIdAndDelete("/saved-recipes/ids/:userId", async (req, res) => {
-  try {
-      const user = await UserModel.findById(req.params.userId);
-      res.status(201).json( { savedRecipes: user?.savedRecipes } );
-  } catch (error) {
-      res.status(500).json({ message: "Couldn't get saved recipes IDs." });
-}
-});
-
-
-router.delete("/saved-recipes/ids/:userId", async (req, res) => {
-  try {
-      const user = await UserModel.findById(req.params.userId);
-      res.status(201).json( { savedRecipes: user?.savedRecipes } );
-  } catch (error) {
-      res.status(500).json({ message: "Couldn't get saved recipes IDs." });
-}
-});
-
-router.delete("/saved-recipes/ids/:userId", async (req, res) => {
-  try {
-      const user = await UserModel.findByIdAndDelete(req.params.userId);
-      res.status(201).json( { savedRecipes: user?.savedRecipes } );
-  } catch (error) {
-      res.status(500).json({ message: "Couldn't get saved recipes IDs." });
-}
-});
-
-
-
+// delete recipe by id - WORKS!
+// router.delete("/:recipeId", async (req, res) => {
+//   try {
+//       const result = await RecipeModel.findByIdAndDelete(req.params.recipeId);
+//       if (!result) {
+//           res.status(404).json({ message: "Recipe not found." });
+//           console.log("Recipe not found");
+//       } else {
+//           res.status(200).json({ message: "Recipe deleted." });
+//           console.log("Recipe deleted");
+//       }
+//   } catch (error) {
+//       res.status(500).json({ message: "Couldn't delete recipe." });
+//   }
+// });
 
 export { router as recipesRouter };
