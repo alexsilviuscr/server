@@ -113,48 +113,42 @@ router.delete("/:recipeId", async (req, res) => {
 });
 
 // remove saved recipe by id from saved recipes list
+// delete saved recipe by id
 router.delete("/saved-recipes/ids/:userId", async (req, res) => {
   try {
-      const result = await RecipeModel.findByIdAndDelete(req.params.recipeId);
-      if (!result) {
-          res.status(404).json({ message: "Recipe not found." });
-          console.log("Recipe not found");
+      const user = await UserModel.findById(req.params.userId);
+      const index = user.savedRecipes.indexOf(req.params.recipeId);
+      if (index === -1) {
+          res.status(404).json({ message: "Recipe not found in user's saved recipes." });
+          console.log("Recipe not found in user's saved recipes");
       } else {
-          res.status(200).json({ message: "Recipe deleted." });
-          console.log("Recipe deleted");
+          user.savedRecipes.splice(index, 1);
+          await user.save();
+          res.status(200).json({ message: "Recipe removed from user's saved recipes." });
+          console.log("Recipe removed from user's saved recipes");
       }
   } catch (error) {
-      res.status(500).json({ message: "Couldn't delete recipe." });
+      res.status(500).json({ message: "Couldn't remove recipe from user's saved recipes." });
   }
 });
-
-// remove saved recipe by id from saved recipes list #2
-router.delete("/saved-recipes/ids/:userId", async (req, res) => {
-  try {
-    const user = await UserModel.findById(req.params.userId);
-    const updatedSavedRecipes = user.savedRecipes.filter((id) => id !== req.params.recipeId);
-    user.savedRecipes = updatedSavedRecipes;
-    await user.save();
-    res.status(200).json({ message: "Recipe removed from saved recipes." });
-  } catch (error) {
-    res.status(500).json({ message: "Couldn't remove recipe from saved recipes." });
-  }
-});
-
-// try 3
 
 router.delete("/saved-recipes/:userId", async (req, res) => {
   try {
-    const user = await UserModel.findById(req.params.userId);
-    const updatedSavedRecipes = user.savedRecipes.filter((id) => id !== req.params.recipeId);
-    user.savedRecipes = updatedSavedRecipes;
-    await user.save();
-    res.status(200).json({ message: "Recipe removed from saved recipes." });
+      const user = await UserModel.findById(req.params.userId);
+      const index = user.savedRecipes.indexOf(req.params.recipeId);
+      if (index === -1) {
+          res.status(404).json({ message: "Recipe not found in user's saved recipes." });
+          console.log("Recipe not found in user's saved recipes");
+      } else {
+          user.savedRecipes.splice(index, 1);
+          await user.save();
+          res.status(200).json({ message: "Recipe removed from user's saved recipes." });
+          console.log("Recipe removed from user's saved recipes");
+      }
   } catch (error) {
-    res.status(500).json({ message: "Couldn't remove recipe from saved recipes." });
+      res.status(500).json({ message: "Couldn't remove recipe from user's saved recipes." });
   }
 });
-
 
 
 export { router as recipesRouter };
