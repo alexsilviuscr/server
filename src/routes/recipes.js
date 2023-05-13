@@ -137,13 +137,18 @@ router.delete("/:recipeId", async (req, res) => {
 
 router.delete("/saved-recipes/ids/:userId", async (req, res) => {
   try {
-    const recipe = await RecipeModel.findById(req.params.recipeId);
+    const userId = req.params.userId;
+    const recipeId = req.body.recipeId;
+
+    const recipe = await RecipeModel.findById(recipeId);
 
     if (!recipe) {
       res.status(404).json({ message: "Recipe not found." });
     } else {
-      // delete the recipe from all users' savedRecipes
-      await UserModel.updateMany({}, { $pull: { savedRecipes: recipe._id } });
+      const deletedRecipe = await savedRecipes.findByIdAndDelete(recipeId);
+
+      // remove recipe from the user's savedRecipes
+      await UserModel.findByIdAndUpdate(userId, { $pull: { savedRecipes: recipeId } });
 
       res.status(200).json({ message: "Recipe deleted." });
     }
@@ -151,24 +156,5 @@ router.delete("/saved-recipes/ids/:userId", async (req, res) => {
     res.status(500).json({ message: "Couldn't delete recipe." });
   }
 });
-
-router.delete("/saved-recipes/:recipeId", async (req, res) => {
-  try {
-    const recipe = await RecipeModel.findById(req.params.recipeId);
-
-    if (!recipe) {
-      res.status(404).json({ message: "Recipe not found." });
-    } else {
-      // delete the recipe from all users' savedRecipes
-      await UserModel.updateMany({}, { $pull: { savedRecipes: recipe._id } });
-
-      res.status(200).json({ message: "Recipe deleted." });
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Couldn't delete recipe." });
-  }
-});
-
-
 
 export { router as recipesRouter };
