@@ -167,7 +167,7 @@ router.delete("/saved-recipes/:userId", async (req, res) => {
     const recipeId = req.body.recipeId;
 
     const recipe = await RecipeModel.findById(recipeId);
-    const savedRecipes = await savedRecipes.findByIdAndDelete(recipeId)
+    const savedRecipe = await savedRecipes.findByIdAndDelete(recipeId)
 
     if (!recipe) {
       res.status(404).json({ message: "Recipe not found." });
@@ -176,8 +176,8 @@ router.delete("/saved-recipes/:userId", async (req, res) => {
       // const deletedRecipe = await savedRecipes.findByIdAndDelete(req.params.recipeId);
 
       // remove recipe from the user's savedRecipes
-      await UserModel.updateMany(userId, { $pull: { savedRecipes: deletedRecipe._id } });
-      // await UserModel.updateMany({ _id: req.params.userId }, { $pull: { savedRecipes: savedRecipe._id } });
+      // await UserModel.updateMany(userId, { $pull: { savedRecipes: deletedRecipe._id } });
+      await UserModel.updateMany({ _id: req.params.userId }, { $pull: { savedRecipes: savedRecipe._id } });
 
       res.status(200).json({ message: "Recipe deleted." });
       console.log("Recipe deleted");
