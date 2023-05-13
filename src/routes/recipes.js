@@ -157,4 +157,40 @@ router.delete("/saved-recipes/ids/:userId/:recipeId", async (req, res) => {
 }
 });
 
+// pre-final attempt
+
+router.delete("/", async (req, res) => {
+
+  try {
+      const recipe = await RecipeModel.findById(req.body.recipeId);
+      const user = await UserModel.findById(req.body.userId);
+
+      user.savedRecipes.delete(recipe);
+      await user.save();
+
+      res.status(201).json ({ savedRecipes: user.savedRecipes });
+      console.log("Recipe removed from saved recipes.")
+
+  } catch (error) {
+      res.status(500).json({ message: "Couldn't save recipe." });
+      console.log("Couldn't save recipe.")
+}
+});
+
+// delete recipe by id
+router.delete("/:recipeId", async (req, res) => {
+  try {
+    const recipe = await RecipeModel.findById(req.params.recipeId);
+    const user = await UserModel.findById(req.body.userId);
+
+    user.savedRecipes.delete(recipe);
+    await user.save();
+
+    res.status(201).json ({ savedRecipes: user.savedRecipes });
+
+  } catch (error) {
+    res.status(500).json({ message: "Couldn't save recipe." });
+  }
+});
+
 export { router as recipesRouter };
