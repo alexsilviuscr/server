@@ -96,7 +96,7 @@ router.get("/saved-recipes/:userId", async (req, res) => {
   }
 });
 
-// delete recipe by id
+// delete recipe by id - WORKS
 router.delete("/:recipeId", async (req, res) => {
   try {
       const result = await RecipeModel.findByIdAndDelete(req.params.recipeId);
@@ -127,6 +127,34 @@ router.delete("/saved-recipes/ids/:userId", async (req, res) => {
       res.status(500).json({ message: "Couldn't delete recipe." });
   }
 });
+
+// remove saved recipe by id from saved recipes list #2
+router.delete("/saved-recipes/ids/:userId", async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.params.userId);
+    const updatedSavedRecipes = user.savedRecipes.filter((id) => id !== req.params.recipeId);
+    user.savedRecipes = updatedSavedRecipes;
+    await user.save();
+    res.status(200).json({ message: "Recipe removed from saved recipes." });
+  } catch (error) {
+    res.status(500).json({ message: "Couldn't remove recipe from saved recipes." });
+  }
+});
+
+// try 3
+
+router.delete("/saved-recipes/:userId", async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.params.userId);
+    const updatedSavedRecipes = user.savedRecipes.filter((id) => id !== req.params.recipeId);
+    user.savedRecipes = updatedSavedRecipes;
+    await user.save();
+    res.status(200).json({ message: "Recipe removed from saved recipes." });
+  } catch (error) {
+    res.status(500).json({ message: "Couldn't remove recipe from saved recipes." });
+  }
+});
+
 
 
 export { router as recipesRouter };
