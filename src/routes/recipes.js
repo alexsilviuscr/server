@@ -112,7 +112,10 @@ router.get("/saved-recipes/:userId", async (req, res) => {
 //   }
 // });
 
-router.delete("/saved-recipes/:userId", async (req, res) => {
+// delete a recipe from the savedRecipes array
+
+router.delete("/saved-recipes/ids/:userId", async (req, res) => {
+
   try {
     const user = await UserModel.findById(req.params.userId);
 
