@@ -72,5 +72,18 @@ router.get("/:id/username", async (req, res) => {
     }
 });
 
+// router.get("/:id/savedRecipes", async (req, res) => {
+//     try {
+//         const user = await UserModel.findById(req.params.id);
+//         if (!user) {
+//             return res.status(404).json({ message: "User not found." });
+//         }
+//         res.json({ savedRecipes: user.savedRecipes });
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).json({ message: "Server Error." });
+//     }
+// });
+
 
 export { router as userRouter }; 
