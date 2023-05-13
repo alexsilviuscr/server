@@ -137,45 +137,54 @@ router.delete("/:recipeId", async (req, res) => {
 
 router.delete("/saved-recipes/ids/:userId", async (req, res) => {
   try {
-    const userId = req.body.userId;
+
     const recipeId = req.params.recipeId;
 
     const recipe = await RecipeModel.findById(recipeId);
+    const savedRecipes = await savedRecipes.findByIdAndDelete(recipeId)
 
     if (!recipe) {
       res.status(404).json({ message: "Recipe not found." });
+      console.log("Recipe not found");
     } else {
-      const deletedRecipe = await savedRecipes.findByIdAndDelete(recipeId);
+      const deletedRecipe = await savedRecipes.findByIdAndDelete(req.params.recipeId);
 
       // remove recipe from the user's savedRecipes
-      await UserModel.findByIdAndUpdate(userId, { $pull: { savedRecipes: recipeId } });
+      await UserModel.updateMany(userId, { $pull: { savedRecipes: deletedRecipe._id } });
 
       res.status(200).json({ message: "Recipe deleted." });
+      console.log("Recipe deleted");
     }
   } catch (error) {
     res.status(500).json({ message: "Couldn't delete recipe." });
+    console.log("Couldn't delete recipe");
   }
 });
 
 router.delete("/saved-recipes/:userId", async (req, res) => {
   try {
-    const userId = req.params.userId;
-    const recipeId = req.params.recipeId;
+
+    const recipeId = req.body.recipeId;
 
     const recipe = await RecipeModel.findById(recipeId);
+    const savedRecipes = await savedRecipes.findByIdAndDelete(recipeId)
 
     if (!recipe) {
       res.status(404).json({ message: "Recipe not found." });
+      console.log("Recipe not found");
     } else {
-      const deletedRecipe = await savedRecipes.findByIdAndDelete(recipeId);
+      // const deletedRecipe = await savedRecipes.findByIdAndDelete(req.params.recipeId);
 
       // remove recipe from the user's savedRecipes
-      await UserModel.findByIdAndUpdate(userId, { $pull: { savedRecipes: recipeId } });
+      await UserModel.updateMany(userId, { $pull: { savedRecipes: deletedRecipe._id } });
+      // await UserModel.updateMany({ _id: req.params.userId }, { $pull: { savedRecipes: savedRecipe._id } });
 
       res.status(200).json({ message: "Recipe deleted." });
+      console.log("Recipe deleted");
     }
   } catch (error) {
     res.status(500).json({ message: "Couldn't delete recipe." });
+    console.log("Couldn't delete recipe");
   }
 });
 
