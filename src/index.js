@@ -10,7 +10,7 @@ dotenv.config();
 
 const app = express();
 const mongoKey = process.env.MONGO_KEY;
-const port = process.env.PORT || 3001;
+const port = process.env.PORT;
 
 app.use(express.json());
 app.use(cors());
