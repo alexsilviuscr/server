@@ -10,7 +10,7 @@ dotenv.config();
 
 const app = express();
 const mongoKey = process.env.MONGO_KEY;
-const port = process.env.PORT;
+const port = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(cors());
@@ -22,4 +22,4 @@ mongoose.connect(mongoKey, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
-app.listen(port || 3001);
+app.listen(port);
