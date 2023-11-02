@@ -22,4 +22,4 @@ mongoose.connect(mongoKey, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
-app.listen(port);
+app.listen(port || 3001);
